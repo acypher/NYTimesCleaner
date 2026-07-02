@@ -2,3 +2,8 @@
 xcuserdata/
 *.xcuserstate
 .amo-upload-uuid
+scripts/release.env
+scripts/keys/
+
+__pycache__/
+*.pyc

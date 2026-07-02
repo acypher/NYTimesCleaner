@@ -1,0 +1,27 @@
+---
+description: When bumping the NewsMinus version, update manifest.json and Safari Xcode files
+globs: manifest.json
+alwaysApply: false
+---
+
+# Version Bumping
+
+When bumping the NewsMinus version number, use the repo tool so all locations stay in sync:
+
+```bash
+python3 scripts/bump-version.py
+```
+
+This updates:
+
+1. **`manifest.json`** — `"version"`
+2. **`safari/NYTimesCleanerSafari.xcodeproj/project.pbxproj`** — `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION`
+3. **`safari/scripts/gen_pbxproj.py`** — same version constants, then regenerates `project.pbxproj`
+
+## Release levels
+
+- **patch** (default) — bug fixes
+- **minor** (`--minor`) — user-facing improvements
+- **major** (`--major`) — breaking changes or newly supported sites in `manifest.json`
+
+Do not hand-edit version strings in only one file.

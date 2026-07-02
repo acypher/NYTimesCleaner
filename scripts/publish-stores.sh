@@ -23,6 +23,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 ROOT="${NYTNA_EXTENSION_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 PARENT="$(cd "$ROOT/.." && pwd)"
 
+# shellcheck source=lib/load-release-env.sh
+source "$SCRIPT_DIR/lib/load-release-env.sh"
+
 BUILD=1
 DRY_RUN=0
 PUBLISH_CHROME=1

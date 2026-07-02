@@ -1,0 +1,17 @@
+---
+description: Solo-developer git workflow for NewsMinus — commit directly to master
+alwaysApply: true
+---
+
+# Git workflow (solo developer)
+
+The repo owner is the only developer. Keep git simple:
+
+- **Commit directly to `master`.** Do not create feature branches, pull requests, or
+  patch branches unless the user asks.
+- **Do not create git tags** unless the user explicitly asks.
+- Push to `origin master`.
+
+Commit messages for releases: `vX.Y.Z: short summary`.
+
+Store publish is separate — see **ship** and **publish-newsminus** skills.
