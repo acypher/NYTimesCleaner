@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "NYTimes Cleaner",
-  "version": "1.2.3",
-  "description": "Stop NYTimes autoplay and hide onsite subscription ads.",
+  "name": "NewsMinus",
+  "version": "1.3.0",
+  "description": "News without video autoplay and self-ads",
   "browser_specific_settings": {
     "gecko": {
       "id": "nytimescleaner@nunus.extension",
@@ -36,7 +36,7 @@
       "128": "icons/icon128.png"
     },
     "default_popup": "popup.html",
-    "default_title": "NYTimes Cleaner"
+    "default_title": "NewsMinus"
   },
   "content_scripts": [
     {

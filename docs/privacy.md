@@ -1,10 +1,10 @@
-# Privacy policy - NYTimes Cleaner
+# Privacy policy - NewsMinus
 
 **Last updated:** April 2026
 
 ## What this extension does
 
-NYTimes Cleaner runs only on **nytimes.com** and **\*.nytimes.com** pages. It changes how videos, carousels, and onsite subscription messages behave in your browser. It operates **entirely on your device** on those sites.
+NewsMinus runs only on **nytimes.com** and **\*.nytimes.com** pages. It changes how videos, carousels, and onsite subscription messages behave in your browser. It operates **entirely on your device** on those sites.
 
 ## Data we collect
 

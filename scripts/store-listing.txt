@@ -1,0 +1,6 @@
+Name: NewsMinus
+
+Slogan: News without video autoplay and self-ads
+
+Description:
+Even though I pay for NYTimes, they keep popping up Ads for their Family Plan, etc. Also, I dislike distracting videos that automatically play. This extension stops both on NYTimes, as well as The Guardian, Ground News and The Epoch Times.

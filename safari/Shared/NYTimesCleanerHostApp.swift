@@ -5,7 +5,7 @@ struct NYTimesCleanerHostApp: App {
     var body: some Scene {
         WindowGroup {
             Text(
-                "NYTimes Cleaner runs in Safari. Turn it on under Safari -> Settings -> Extensions and allow nytimes.com."
+                "NewsMinus runs in Safari. Turn it on under Safari -> Settings -> Extensions and allow supported news sites."
             )
             .padding(24)
             .multilineTextAlignment(.center)

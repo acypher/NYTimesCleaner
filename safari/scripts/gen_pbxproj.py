@@ -327,7 +327,7 @@ s = f"""// !$*UTF8*$!
 \t\t\t\tCURRENT_PROJECT_VERSION = 1;
 \t\t\t\tENABLE_PREVIEWS = YES;
 \t\t\t\tGENERATE_INFOPLIST_FILE = YES;
-\t\t\t\tINFOPLIST_KEY_CFBundleDisplayName = NYTimesCleaner;
+\t\t\t\tINFOPLIST_KEY_CFBundleDisplayName = NewsMinus;
 \t\t\t\tINFOPLIST_KEY_NSHumanReadableCopyright = "";
 \t\t\t\tLD_RUNPATH_SEARCH_PATHS = (
 \t\t\t\t\t"$(inherited)",
@@ -353,7 +353,7 @@ s = f"""// !$*UTF8*$!
 \t\t\t\tCURRENT_PROJECT_VERSION = 1;
 \t\t\t\tENABLE_PREVIEWS = YES;
 \t\t\t\tGENERATE_INFOPLIST_FILE = YES;
-\t\t\t\tINFOPLIST_KEY_CFBundleDisplayName = NYTimesCleaner;
+\t\t\t\tINFOPLIST_KEY_CFBundleDisplayName = NewsMinus;
 \t\t\t\tINFOPLIST_KEY_NSHumanReadableCopyright = "";
 \t\t\t\tLD_RUNPATH_SEARCH_PATHS = (
 \t\t\t\t\t"$(inherited)",
@@ -378,7 +378,7 @@ s = f"""// !$*UTF8*$!
 \t\t\t\tENABLE_USER_SCRIPT_SANDBOXING = NO;
 \t\t\t\tGENERATE_INFOPLIST_FILE = NO;
 \t\t\t\tINFOPLIST_FILE = Extension/Info.plist;
-\t\t\t\tINFOPLIST_KEY_CFBundleDisplayName = NYTimesCleaner;
+\t\t\t\tINFOPLIST_KEY_CFBundleDisplayName = NewsMinus;
 \t\t\t\tINFOPLIST_KEY_NSHumanReadableCopyright = "";
 \t\t\t\tLD_RUNPATH_SEARCH_PATHS = (
 \t\t\t\t\t"$(inherited)",
@@ -405,7 +405,7 @@ s = f"""// !$*UTF8*$!
 \t\t\t\tENABLE_USER_SCRIPT_SANDBOXING = NO;
 \t\t\t\tGENERATE_INFOPLIST_FILE = NO;
 \t\t\t\tINFOPLIST_FILE = Extension/Info.plist;
-\t\t\t\tINFOPLIST_KEY_CFBundleDisplayName = NYTimesCleaner;
+\t\t\t\tINFOPLIST_KEY_CFBundleDisplayName = NewsMinus;
 \t\t\t\tINFOPLIST_KEY_NSHumanReadableCopyright = "";
 \t\t\t\tLD_RUNPATH_SEARCH_PATHS = (
 \t\t\t\t\t"$(inherited)",

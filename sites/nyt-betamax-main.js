@@ -14,8 +14,9 @@
  *   gesture anywhere on the gallery (slide, link, arrows) allows play on its videos.
  * - Vi large-breakpoint promos: <video> inside section.story-wrapper section[data-tpl="lb"]
  *   (Magazine / hero interview video + headline); gesture on the lb block or video.
- * - Gallery image carousels (same section, ol.carousel-ol): periodic setInterval ticks that
- *   advance slides are no-op'd while that DOM is present (typical 3-12s delays).
+ * - Gallery image carousels (same section, ol.carousel-ol): setInterval/setTimeout callbacks
+ *   with 2.8s–13s delays are no-op'd while that carousel DOM is present. This is the safe
+ *   interval-only approach; the class-revert MutationObserver approach was removed (crash).
  *
  * Defaults on; the popup can disable it.
  */
@@ -64,6 +65,61 @@
   function installAutoplayBlocker() {
     if (window.__nytCleanerMainAutoplayLoaded) return;
     window.__nytCleanerMainAutoplayLoaded = true;
+
+  function installGalleryImageCarouselIntervalBlock() {
+    if (window.__nunusGalleryCarouselIntervalHook) return;
+    window.__nunusGalleryCarouselIntervalHook = true;
+
+    const DELAY_MIN_MS = 2800;
+    const DELAY_MAX_MS = 13000;
+
+    function shouldBlockGalleryTick() {
+      try {
+        return !!document.querySelector(
+          'section[data-testid="Gallery"] ol.carousel-ol'
+        );
+      } catch (_) {
+        return false;
+      }
+    }
+
+    const origSetInterval = window.setInterval;
+    window.setInterval = function nunusGalleryGuardedSetInterval(fn, delay) {
+      const tail = Array.prototype.slice.call(arguments, 2);
+      if (
+        typeof fn === 'function' &&
+        typeof delay === 'number' &&
+        delay >= DELAY_MIN_MS &&
+        delay <= DELAY_MAX_MS
+      ) {
+        const wrapped = function nunusGalleryNoAutoTick(...cbArgs) {
+          if (shouldBlockGalleryTick()) return;
+          return fn.apply(this, cbArgs);
+        };
+        return origSetInterval.apply(this, [wrapped, delay].concat(tail));
+      }
+      return origSetInterval.apply(this, arguments);
+    };
+
+    const origSetTimeout = window.setTimeout;
+    window.setTimeout = function nunusGalleryGuardedSetTimeout(fn, delay) {
+      const tail = Array.prototype.slice.call(arguments, 2);
+      if (
+        typeof fn === 'function' &&
+        typeof delay === 'number' &&
+        delay >= DELAY_MIN_MS &&
+        delay <= DELAY_MAX_MS
+      ) {
+        const wrapped = function nunusGalleryNoAutoTimeout(...cbArgs) {
+          if (shouldBlockGalleryTick()) return;
+          return fn.apply(this, cbArgs);
+        };
+        return origSetTimeout.apply(this, [wrapped, delay].concat(tail));
+      }
+      return origSetTimeout.apply(this, arguments);
+    };
+  }
+  installGalleryImageCarouselIntervalBlock();
 
   var __nunusOrigPlay = HTMLVideoElement.prototype.play;
   HTMLVideoElement.prototype.play = function nunusEarlyPlayGuard() {
@@ -160,6 +216,21 @@
       if (!(el instanceof HTMLVideoElement)) return false;
       if (!el.closest('section[data-tpl="lb"]')) return false;
       return !!el.closest('section.story-wrapper');
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function isGenericArticleVideoElement(el) {
+    try {
+      if (!(el instanceof HTMLVideoElement)) return false;
+      if (el.getAttribute('data-testid') === 'betamax-video') return false;
+      if (betamaxHostFromVideo(el)) return false;
+      if (el.getAttribute('data-testid') === 'cinemagraph') return false;
+      if (isVhsGridPageVideoElement(el)) return false;
+      if (isGalleryCarouselVideoElement(el)) return false;
+      if (isTplLbStoryPromoVideoElement(el)) return false;
+      return true;
     } catch (_) {
       return false;
     }
@@ -420,6 +491,53 @@
     }
   }
 
+  function wireGenericArticleVideoPause(video) {
+    if (!video || video.dataset.nunusGenericPauseWired === '1') return;
+    video.dataset.nunusGenericPauseWired = '1';
+    video.addEventListener(
+      'pause',
+      e => {
+        if (e.isTrusted) delete video.dataset.nunusGenericPlayAllowed;
+      },
+      true
+    );
+    // These videos get `controls` forced on (isolated-world script), but the
+    // player often sits inside a card link (<a href>) or SPA router click
+    // target. Operating the controls would otherwise navigate to the article,
+    // so keep the click from bubbling up to that link. Native controls already
+    // handled the event by the time it bubbles to the video element.
+    video.addEventListener(
+      'click',
+      e => {
+        if (!e.isTrusted) return;
+        e.stopPropagation();
+        try {
+          if (video.closest && video.closest('a[href]')) e.preventDefault();
+        } catch (_) {}
+      },
+      false
+    );
+  }
+
+  function scanGenericArticleVideo(video) {
+    if (!isGenericArticleVideoElement(video)) return;
+    wireGenericArticleVideoPause(video);
+    try {
+      video.pause();
+    } catch (_) {}
+  }
+
+  function processGenericArticleVideoInTree(node) {
+    if (!node || node.nodeType !== Node.ELEMENT_NODE) return;
+    if (node instanceof HTMLVideoElement) {
+      scanGenericArticleVideo(node);
+      return;
+    }
+    if (node.querySelectorAll) {
+      node.querySelectorAll('video').forEach(scanGenericArticleVideo);
+    }
+  }
+
   function stripBetamaxAutoplay(vid) {
     try {
       vid.removeAttribute('autoplay');
@@ -534,6 +652,7 @@
     processVhsGridPageInTree(node);
     processGalleryCarouselInTree(node);
     processTplLbStoryPromoInTree(node);
+    processGenericArticleVideoInTree(node);
   }
 
   HTMLVideoElement.prototype.play = function play() {
@@ -582,6 +701,17 @@
     }
     if (isTplLbStoryPromoVideoElement(this)) {
       if (this.dataset.nunusTplLbPlayAllowed !== '1') {
+        try {
+          this.pause();
+        } catch (_) {}
+        return Promise.reject(
+          new DOMException('Nunus blocked autoplay', 'NotAllowedError')
+        );
+      }
+      return __nunusOrigPlay.apply(this, arguments);
+    }
+    if (isGenericArticleVideoElement(this)) {
+      if (this.dataset.nunusGenericPlayAllowed !== '1') {
         try {
           this.pause();
         } catch (_) {}
@@ -702,12 +832,33 @@
     }
   }
 
+  function grantGenericArticleVideoGestures(e) {
+    if (!e.isTrusted) return;
+    for (const node of e.composedPath()) {
+      if (isGenericArticleVideoElement(node)) {
+        node.dataset.nunusGenericPlayAllowed = '1';
+        wireGenericArticleVideoPause(node);
+        return;
+      }
+    }
+    let t = e.target;
+    if (t && t.nodeType !== Node.ELEMENT_NODE) t = t.parentElement;
+    const wrap = t && t.closest && t.closest('figure, a[href]');
+    if (!wrap) return;
+    const vid = wrap.querySelector('video');
+    if (vid && isGenericArticleVideoElement(vid)) {
+      vid.dataset.nunusGenericPlayAllowed = '1';
+      wireGenericArticleVideoPause(vid);
+    }
+  }
+
   function grantVideoGestures(e) {
     grantBetamaxGestures(e);
     grantCinemagraphGestures(e);
     grantVhsGridPageGestures(e);
     grantGalleryCarouselGestures(e);
     grantTplLbStoryPromoGestures(e);
+    grantGenericArticleVideoGestures(e);
   }
 
   document.addEventListener('pointerdown', grantVideoGestures, true);
@@ -727,6 +878,7 @@
     document
       .querySelectorAll('section.story-wrapper section[data-tpl="lb"] video')
       .forEach(scanTplLbStoryPromoVideo);
+    document.querySelectorAll('video').forEach(scanGenericArticleVideo);
 
     if (!window.__nunusBetamaxDocMo) {
       window.__nunusBetamaxDocMo = new MutationObserver(mutations => {

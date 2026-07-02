@@ -2,7 +2,6 @@
 # Publish the current NYTimesCleaner release artifacts to Chrome Web Store and AMO.
 #
 # Required Chrome Web Store env:
-#   CWS_PUBLISHER_ID
 #   CWS_EXTENSION_ID
 #   CWS_CLIENT_ID
 #   CWS_CLIENT_SECRET
@@ -146,7 +145,7 @@ PY
 }
 
 publish_chrome() {
-  require_env CWS_PUBLISHER_ID CWS_EXTENSION_ID CWS_CLIENT_ID CWS_CLIENT_SECRET CWS_REFRESH_TOKEN
+  require_env CWS_EXTENSION_ID CWS_CLIENT_ID CWS_CLIENT_SECRET CWS_REFRESH_TOKEN
 
   log "Chrome: refreshing access token"
   local token_json
@@ -160,14 +159,15 @@ publish_chrome() {
   local token
   token="$(jq -er '.access_token' <<<"$token_json")"
 
-  local upload_url="https://chromewebstore.googleapis.com/upload/v2/publishers/$CWS_PUBLISHER_ID/items/$CWS_EXTENSION_ID:upload"
-  local publish_url="https://chromewebstore.googleapis.com/v2/publishers/$CWS_PUBLISHER_ID/items/$CWS_EXTENSION_ID:publish"
+  local upload_url="https://www.googleapis.com/upload/chromewebstore/v1.1/items/$CWS_EXTENSION_ID"
+  local publish_url="https://www.googleapis.com/chromewebstore/v1.1/items/$CWS_EXTENSION_ID/publish"
 
   log "Chrome: uploading $ZIP"
   local upload_json
   upload_json="$(
-    curl -fsS -X POST \
+    curl -fsS -X PUT \
       -H "Authorization: Bearer $token" \
+      -H "x-goog-api-version: 2" \
       -T "$ZIP" \
       "$upload_url"
   )"
@@ -178,6 +178,7 @@ publish_chrome() {
   publish_json="$(
     curl -fsS -X POST \
       -H "Authorization: Bearer $token" \
+      -H "x-goog-api-version: 2" \
       "$publish_url"
   )"
   jq -c . <<<"$publish_json"
@@ -286,7 +287,7 @@ log "  Chrome:  $ZIP"
 log "  Firefox: $XPI"
 
 if ((DRY_RUN)); then
-  ((PUBLISH_CHROME)) && require_env CWS_PUBLISHER_ID CWS_EXTENSION_ID CWS_CLIENT_ID CWS_CLIENT_SECRET CWS_REFRESH_TOKEN
+  ((PUBLISH_CHROME)) && require_env CWS_EXTENSION_ID CWS_CLIENT_ID CWS_CLIENT_SECRET CWS_REFRESH_TOKEN
   ((PUBLISH_FIREFOX)) && require_env AMO_JWT_ISSUER AMO_JWT_SECRET AMO_ADDON_ID
   log "Dry run passed."
   exit 0
