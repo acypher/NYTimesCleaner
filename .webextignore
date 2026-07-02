@@ -1,0 +1,9 @@
+safari/
+images/
+samples/
+scripts/
+.git/
+.cursor/
+.idea/
+*.iml
+.DS_Store

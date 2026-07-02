@@ -1,0 +1,12 @@
+{
+  "summary": {
+    "en-US": "News without video autoplay and self-ads"
+  },
+  "description": {
+    "en-US": "Even though I pay for NYTimes, they keep popping up Ads for their Family Plan, etc. Also, I dislike distracting videos that automatically play. This extension stops both on NYTimes, as well as The Guardian, Ground News and The Epoch Times."
+  },
+  "categories": ["other"],
+  "version": {
+    "license": "MPL-2.0"
+  }
+}
