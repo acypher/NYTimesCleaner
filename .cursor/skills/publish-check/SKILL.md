@@ -1,18 +1,16 @@
 ---
 name: publish-check
 description: >-
-  Check Chrome Web Store and Firefox AMO to see whether manifest.json version
-  is live. Use when the user says publishCheck, publish check, check store
-  status, is the release live, or asks whether a version is available on stores.
+  Check Chrome Web Store, Firefox AMO, and the Apple App Store (Safari macOS +
+  iOS) to see whether manifest.json version is live. Use when the user says
+  publishCheck, publish check, check store status, is the release live, or asks
+  whether a version is available on stores.
 ---
 
 # Publish check
 
 Verify that the version in `manifest.json` is **live** (available to users) on
-Chrome and Firefox.
-
-Safari is not checked automatically — confirm manually in Xcode / App Store
-Connect if applicable.
+Chrome, Firefox, and Safari (Mac App Store + iOS App Store).
 
 ## Run
 
@@ -23,7 +21,12 @@ From the **NewsMinus repo root**:
 ```
 
 Requires credentials via `scripts/release.env` or shared Nunus `release.env`.
-Exit **0** only when Chrome and Firefox both report **LIVE** for the repo version.
+Exit **0** only when all stores report **LIVE** for the repo version.
+
+**Safari auto-release:** if a Safari version is **PENDING_DEVELOPER_RELEASE**
+(approved by Apple, awaiting manual release), the check releases it
+automatically via the ASC API. Disable with `--no-release` or
+`APP_STORE_AUTO_RELEASE=0`.
 
 Check a specific published version (while `manifest.json` has moved on):
 
@@ -57,6 +60,14 @@ manually.
 
 Uses AMO API with `AMO_ADDON_ID` (`nytimescleaner@nunus.extension` / slug
 `newsminus`). Unreviewed listed builds show **PENDING**.
+
+### Safari (macOS + iOS)
+
+Uses the App Store Connect API with the shared Nunus API key. macOS checks
+bundle id `com.nunus.NYTimesCleanerHost`; iOS checks
+`com.nunus.NYTimesCleanerHost.ios` (separate app). Versions
+**PENDING_DEVELOPER_RELEASE** are auto-released (see above). If no iOS app
+record exists yet, iOS shows **BEHIND** with a reminder to create it in ASC.
 
 ## Report to the user
 

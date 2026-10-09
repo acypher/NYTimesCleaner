@@ -112,7 +112,7 @@ def main() -> int:
     elif args.minor:
         new_version = bump_minor(current)
     else:
-        new_version = bump_patch(current)
+        new_version = bump_minor(current)
 
     new_build = current_build + 1
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check Chrome Web Store and Firefox AMO for pending submissions."""
+"""Check Chrome Web Store, Firefox AMO, and Safari (App Store) for pending submissions."""
 
 from __future__ import annotations
 
@@ -22,6 +22,22 @@ MANIFEST = ROOT / "manifest.json"
 
 sys.path.insert(0, str(SCRIPT_DIR / "lib"))
 from load_release_env import load_release_env  # noqa: E402
+
+SAFARI_PENDING_VERSION_STATES = {
+    "WAITING_FOR_REVIEW",
+    "IN_REVIEW",
+    "PENDING_APPLE_RELEASE",
+    "PENDING_DEVELOPER_RELEASE",
+}
+SAFARI_PENDING_BUILD_STATES = {
+    "PROCESSING",
+    "FAILED",
+}
+# (store label, ASC platform, bundle-id env var, default bundle id)
+SAFARI_PLATFORMS = [
+    ("Safari (Mac App Store)", "MAC_OS", "MACOS_BUNDLE_ID", "com.nunus.NYTimesCleanerHost"),
+    ("Safari (iOS App Store)", "IOS", "IOS_BUNDLE_ID", "com.nunus.NYTimesCleanerHost.ios"),
+]
 
 
 @dataclass
@@ -175,10 +191,108 @@ def firefox_status(target: str) -> StoreStatus:
     )
 
 
+def asc_get(path: str):
+    from app_store_connect import AppStoreConnectClient
+
+    if not hasattr(asc_get, "_client"):
+        asc_get._client = AppStoreConnectClient()
+    return asc_get._client.get(path)
+
+
+def safari_status(store: str, platform: str, bundle_env: str, bundle_default: str) -> StoreStatus:
+    from app_store_connect import AppStoreConnectError
+
+    bundle_id = env(bundle_env) or bundle_default
+    required = [
+        "APP_STORE_CONNECT_API_KEY_ID",
+        "APP_STORE_CONNECT_ISSUER_ID",
+        "APP_STORE_CONNECT_API_KEY_PATH",
+    ]
+    if any(not env(name) for name in required):
+        return StoreStatus(
+            store,
+            "CHECK",
+            "credentials missing",
+            "Set App Store Connect API key vars in scripts/release.env (or shared Nunus release.env)",
+        )
+
+    try:
+        apps = asc_get(f"/v1/apps?filter[bundleId]={parse.quote(bundle_id)}")
+    except AppStoreConnectError as exc:
+        return StoreStatus(store, "CHECK", "could not list app", f"{exc}: {exc.body}")
+
+    app_rows = apps.get("data") or []
+    if not app_rows:
+        # Nothing can be pending without an app record. iOS ships as a separate
+        # app; until its record exists this must not block other stores.
+        return StoreStatus(
+            store,
+            "READY" if platform == "IOS" else "CHECK",
+            f"no app for bundle id {bundle_id}",
+            "One-time step: create the app record in App Store Connect (New App).",
+        )
+
+    app_id = app_rows[0]["id"]
+    app_name = app_rows[0]["attributes"].get("name", bundle_id)
+
+    try:
+        versions = asc_get(f"/v1/apps/{app_id}/appStoreVersions?filter[platform]={platform}&limit=20")
+    except AppStoreConnectError as exc:
+        return StoreStatus(store, "CHECK", "could not list versions", f"{exc}: {exc.body}")
+
+    pending_versions: list[str] = []
+    live_version = "unknown"
+    for row in versions.get("data", []):
+        attrs = row.get("attributes") or {}
+        version_string = attrs.get("versionString") or "?"
+        state = attrs.get("appStoreState") or "UNKNOWN"
+        if state == "READY_FOR_SALE":
+            live_version = version_string
+        if state in SAFARI_PENDING_VERSION_STATES:
+            pending_versions.append(f"{version_string} ({state})")
+
+    if pending_versions:
+        return StoreStatus(
+            store,
+            "PENDING",
+            "version in review or awaiting release: " + ", ".join(pending_versions),
+            f"live version is {live_version}",
+        )
+
+    try:
+        builds = asc_get(f"/v1/apps/{app_id}/builds?limit=20")
+    except AppStoreConnectError as exc:
+        return StoreStatus(store, "CHECK", "could not list builds", f"{exc}: {exc.body}")
+
+    pending_builds: list[str] = []
+    for row in builds.get("data", []):
+        attrs = row.get("attributes") or {}
+        processing = attrs.get("processingState") or "UNKNOWN"
+        build_number = attrs.get("version") or "?"
+        if processing in SAFARI_PENDING_BUILD_STATES:
+            pending_builds.append(f"build {build_number} ({processing})")
+
+    if pending_builds:
+        return StoreStatus(
+            store,
+            "PENDING",
+            "build still processing: " + ", ".join(pending_builds[:3]),
+            f"live version is {live_version}",
+        )
+
+    return StoreStatus(
+        store,
+        "READY",
+        f"no version in review or build processing ({app_name} live {live_version})",
+    )
+
+
 def main() -> int:
     load_release_env()
     target = repo_version()
     rows = [chrome_status(target), firefox_status(target)]
+    for store, platform, bundle_env, bundle_default in SAFARI_PLATFORMS:
+        rows.append(safari_status(store, platform, bundle_env, bundle_default))
 
     print(f"NewsMinus publish pending check (manifest {target})")
     print()

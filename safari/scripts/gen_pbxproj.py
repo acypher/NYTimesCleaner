@@ -516,7 +516,7 @@ s = f"""// !$*UTF8*$!
 \t\t\t\t\t"@executable_path/../Frameworks",
 \t\t\t\t);
 \t\t\t\tMACOSX_DEPLOYMENT_TARGET = 14.0;
-\t\t\t\tMARKETING_VERSION = 3.0.6;
+\t\t\t\tMARKETING_VERSION = 3.0.7;
 \t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost;
 \t\t\t\tPRODUCT_NAME = "$(TARGET_NAME)";
 \t\t\t\tSDKROOT = macosx;
@@ -545,7 +545,7 @@ s = f"""// !$*UTF8*$!
 \t\t\t\t\t"@executable_path/../Frameworks",
 \t\t\t\t);
 \t\t\t\tMACOSX_DEPLOYMENT_TARGET = 14.0;
-\t\t\t\tMARKETING_VERSION = 3.0.6;
+\t\t\t\tMARKETING_VERSION = 3.0.7;
 \t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost;
 \t\t\t\tPRODUCT_NAME = "$(TARGET_NAME)";
 \t\t\t\tSDKROOT = macosx;
@@ -571,7 +571,7 @@ s = f"""// !$*UTF8*$!
 \t\t\t\t\t"@executable_path/../../../../Frameworks",
 \t\t\t\t);
 \t\t\t\tMACOSX_DEPLOYMENT_TARGET = 14.0;
-\t\t\t\tMARKETING_VERSION = 3.0.6;
+\t\t\t\tMARKETING_VERSION = 3.0.7;
 \t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost.Extension;
 \t\t\t\tPRODUCT_NAME = "$(TARGET_NAME)";
 \t\t\t\tSDKROOT = macosx;
@@ -598,7 +598,7 @@ s = f"""// !$*UTF8*$!
 \t\t\t\t\t"@executable_path/../../../../Frameworks",
 \t\t\t\t);
 \t\t\t\tMACOSX_DEPLOYMENT_TARGET = 14.0;
-\t\t\t\tMARKETING_VERSION = 3.0.6;
+\t\t\t\tMARKETING_VERSION = 3.0.7;
 \t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost.Extension;
 \t\t\t\tPRODUCT_NAME = "$(TARGET_NAME)";
 \t\t\t\tSDKROOT = macosx;
@@ -629,7 +629,7 @@ s = f"""// !$*UTF8*$!
 \t\t\t\t\t"$(inherited)",
 \t\t\t\t\t"@executable_path/Frameworks",
 \t\t\t\t);
-\t\t\t\tMARKETING_VERSION = 3.0.6;
+\t\t\t\tMARKETING_VERSION = 3.0.7;
 \t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = {IOS_HOST_BUNDLE};
 \t\t\t\tPRODUCT_NAME = "$(TARGET_NAME)";
 \t\t\t\tSDKROOT = iphoneos;
@@ -664,7 +664,7 @@ s = f"""// !$*UTF8*$!
 \t\t\t\t\t"$(inherited)",
 \t\t\t\t\t"@executable_path/Frameworks",
 \t\t\t\t);
-\t\t\t\tMARKETING_VERSION = 3.0.6;
+\t\t\t\tMARKETING_VERSION = 3.0.7;
 \t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = {IOS_HOST_BUNDLE};
 \t\t\t\tPRODUCT_NAME = "$(TARGET_NAME)";
 \t\t\t\tPROVISIONING_PROFILE_SPECIFIER = "{IOS_HOST_PROFILE}";
@@ -692,7 +692,7 @@ s = f"""// !$*UTF8*$!
 \t\t\t\t\t"@executable_path/Frameworks",
 \t\t\t\t\t"@executable_path/../../Frameworks",
 \t\t\t\t);
-\t\t\t\tMARKETING_VERSION = 3.0.6;
+\t\t\t\tMARKETING_VERSION = 3.0.7;
 \t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = {IOS_EXT_BUNDLE};
 \t\t\t\tPRODUCT_NAME = "$(TARGET_NAME)";
 \t\t\t\tSDKROOT = iphoneos;
@@ -723,7 +723,7 @@ s = f"""// !$*UTF8*$!
 \t\t\t\t\t"@executable_path/Frameworks",
 \t\t\t\t\t"@executable_path/../../Frameworks",
 \t\t\t\t);
-\t\t\t\tMARKETING_VERSION = 3.0.6;
+\t\t\t\tMARKETING_VERSION = 3.0.7;
 \t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = {IOS_EXT_BUNDLE};
 \t\t\t\tPRODUCT_NAME = "$(TARGET_NAME)";
 \t\t\t\tPROVISIONING_PROFILE_SPECIFIER = "{IOS_EXT_PROFILE}";

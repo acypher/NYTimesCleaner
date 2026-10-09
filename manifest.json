@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "NewsMinus",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "description": "News without video autoplay and self-ads",
   "browser_specific_settings": {
     "gecko": {
@@ -33,10 +33,7 @@
     "https://*.theepochtimes.com/*"
   ],
   "background": {
-    "service_worker": "background.js",
-    "scripts": [
-      "background.js"
-    ]
+    "service_worker": "background.js"
   },
   "action": {
     "default_icon": {

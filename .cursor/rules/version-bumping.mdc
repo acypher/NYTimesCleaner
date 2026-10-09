@@ -12,16 +12,22 @@ When bumping the NewsMinus version number, use the repo tool so all locations st
 python3 scripts/bump-version.py
 ```
 
+Default bump is **minor** (same as Nunus). Agent edits use **patch** via **agent-patch-version**.
+
 This updates:
 
 1. **`manifest.json`** — `"version"`
-2. **`safari/NYTimesCleanerSafari.xcodeproj/project.pbxproj`** — `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION`
+2. **`safari/NewsMinusSafari.xcodeproj/project.pbxproj`** — `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION`
 3. **`safari/scripts/gen_pbxproj.py`** — same version constants, then regenerates `project.pbxproj`
 
 ## Release levels
 
-- **patch** (default) — bug fixes
-- **minor** (`--minor`) — user-facing improvements
-- **major** (`--major`) — breaking changes or newly supported sites in `manifest.json`
+- **MAJOR** — newly supported site in `manifest.json`, or breaking changes
+- **MINOR** — user-facing improvements within sites already shipped (`--minor` or **ship** when the user asks for a release bump)
+- **PATCH** — bug fixes (default for agent edits; see **agent-patch-version**)
+
+## Agent edits
+
+When the agent changes committable files in a turn, bump **patch** per **agent-patch-version** (always-applied rule). Use `./scripts/bump-version.py --version X.Y.Z` after other edits.
 
 Do not hand-edit version strings in only one file.

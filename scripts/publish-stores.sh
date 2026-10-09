@@ -1,302 +1,218 @@
 #!/usr/bin/env bash
-# Publish the current NYTimesCleaner release artifacts to Chrome Web Store and AMO.
+# Build and publish the current manifest.json version to Chrome, Firefox, and Safari.
+# No version bump or git operations — use release.sh for a full release.
 #
-# Required Chrome Web Store env:
-#   CWS_EXTENSION_ID
-#   CWS_CLIENT_ID
-#   CWS_CLIENT_SECRET
-#   CWS_REFRESH_TOKEN
+# Before publish (run manually or rely on checks below):
+#   ./scripts/check-release-credentials.sh
+#   ./scripts/check-store-pending.sh   # must exit 0 (READY)
 #
-# Required Firefox AMO env:
-#   AMO_JWT_ISSUER
-#   AMO_JWT_SECRET
-#   AMO_ADDON_ID       # AMO numeric id, slug, or manifest guid
+# Usage:
+#   ./scripts/publish-stores.sh                # Chrome + Firefox + Safari macOS + Safari iOS
+#   ./scripts/publish-stores.sh --build-only
+#   ./scripts/publish-stores.sh --dry-run
+#   ./scripts/publish-stores.sh --chrome-only
+#   ./scripts/publish-stores.sh --firefox-only
+#   ./scripts/publish-stores.sh --safari-only
+#   ./scripts/publish-stores.sh --no-safari
+#   ./scripts/publish-stores.sh --no-ios
+#   ./scripts/publish-stores.sh --no-build     # use existing ../NewsMinus-<version>.zip/.xpi
 #
-# Optional env:
-#   AMO_CHANNEL=listed
-#   AMO_BASE_URL=https://addons.mozilla.org/api/v5
-#   NYTNA_EXTENSION_ROOT=/path/to/repo
+# iOS Safari (separate App Store app com.nunus.NYTimesCleanerHost.ios) is included by default.
+# Skip it with --no-ios or PUBLISH_INCLUDE_IOS=0.
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 ROOT="${NYTNA_EXTENSION_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
-PARENT="$(cd "$ROOT/.." && pwd)"
-
 # shellcheck source=lib/load-release-env.sh
 source "$SCRIPT_DIR/lib/load-release-env.sh"
 
 BUILD=1
+BUILD_ONLY=0
 DRY_RUN=0
 PUBLISH_CHROME=1
 PUBLISH_FIREFOX=1
-AMO_CHANNEL="${AMO_CHANNEL:-listed}"
-AMO_BASE_URL="${AMO_BASE_URL:-https://addons.mozilla.org/api/v5}"
+PUBLISH_SAFARI=1
+INCLUDE_IOS="${PUBLISH_INCLUDE_IOS:-1}"
 
 usage() {
-  cat <<'EOF'
-Usage: scripts/publish-stores.sh [options]
-
-Options:
-  --dry-run             Validate artifacts and required environment only.
-  --no-build            Use existing ../NYTimesCleaner-<version>.zip/.xpi files.
-  --chrome-only         Publish only to Chrome Web Store.
-  --firefox-only        Publish only to Firefox AMO.
-  --amo-channel VALUE   AMO channel: listed or unlisted. Default: listed.
-  -h, --help            Show this help.
-
-The script builds versioned artifacts with scripts/newCleaner.sh by default.
-Chrome publishing submits the zip for review using the existing store listing.
-Firefox publishing uploads the xpi, waits for validation, then creates a new
-version for the existing AMO add-on.
-EOF
-}
-
-log() {
-  printf '%s\n' "$*"
-}
-
-die() {
-  printf 'publish-stores: %s\n' "$*" >&2
+  sed -n '2,16p' "$0" >&2
   exit 1
 }
 
-need_command() {
-  command -v "$1" >/dev/null 2>&1 || die "missing required command: $1"
-}
-
-require_env() {
-  local missing=()
-  local name
-  for name in "$@"; do
-    if [[ -z "${!name:-}" ]]; then
-      missing+=("$name")
-    fi
-  done
-
-  if ((${#missing[@]})); then
-    die "missing required environment variables: ${missing[*]}"
-  fi
-}
-
-url_path_encode() {
-  python3 - "$1" <<'PY'
-import sys
-from urllib.parse import quote
-
-print(quote(sys.argv[1], safe=""))
-PY
-}
-
-amo_jwt() {
-  require_env AMO_JWT_ISSUER AMO_JWT_SECRET
-  python3 - <<'PY'
-import base64
-import hashlib
-import hmac
-import json
-import os
-import time
-import uuid
-
-def b64url(data):
-    return base64.urlsafe_b64encode(data).rstrip(b"=").decode("ascii")
-
-issued_at = int(time.time())
-header = {"alg": "HS256", "typ": "JWT"}
-payload = {
-    "iss": os.environ["AMO_JWT_ISSUER"],
-    "jti": str(uuid.uuid4()),
-    "iat": issued_at,
-    "exp": issued_at + 60,
-}
-unsigned = ".".join(
-    b64url(json.dumps(part, separators=(",", ":")).encode("utf-8"))
-    for part in (header, payload)
-)
-signature = hmac.new(
-    os.environ["AMO_JWT_SECRET"].encode("utf-8"),
-    unsigned.encode("ascii"),
-    hashlib.sha256,
-).digest()
-print(f"{unsigned}.{b64url(signature)}")
-PY
-}
-
-version_from_manifest() {
-  python3 - "$ROOT/manifest.json" <<'PY'
-import json
-import sys
-
-with open(sys.argv[1], encoding="utf-8") as manifest:
-    print(json.load(manifest)["version"])
-PY
-}
-
-validate_artifacts() {
-  [[ -f "$ZIP" ]] || die "missing Chrome zip: $ZIP"
-  [[ -f "$XPI" ]] || die "missing Firefox xpi: $XPI"
-  python3 - "$ZIP" "$XPI" <<'PY'
-import sys
-import zipfile
-
-for path in sys.argv[1:]:
-    with zipfile.ZipFile(path) as archive:
-        if "manifest.json" not in archive.namelist():
-            raise SystemExit(f"manifest.json is not at archive root: {path}")
-PY
-}
-
-publish_chrome() {
-  require_env CWS_EXTENSION_ID CWS_CLIENT_ID CWS_CLIENT_SECRET CWS_REFRESH_TOKEN
-
-  log "Chrome: refreshing access token"
-  local token_json
-  token_json="$(
-    curl -fsS "https://oauth2.googleapis.com/token" \
-      -d "client_secret=$CWS_CLIENT_SECRET" \
-      -d "grant_type=refresh_token" \
-      -d "refresh_token=$CWS_REFRESH_TOKEN" \
-      -d "client_id=$CWS_CLIENT_ID"
-  )"
-  local token
-  token="$(jq -er '.access_token' <<<"$token_json")"
-
-  local upload_url="https://www.googleapis.com/upload/chromewebstore/v1.1/items/$CWS_EXTENSION_ID"
-  local publish_url="https://www.googleapis.com/chromewebstore/v1.1/items/$CWS_EXTENSION_ID/publish"
-
-  log "Chrome: uploading $ZIP"
-  local upload_json
-  upload_json="$(
-    curl -fsS -X PUT \
-      -H "Authorization: Bearer $token" \
-      -H "x-goog-api-version: 2" \
-      -T "$ZIP" \
-      "$upload_url"
-  )"
-  jq -c '{uploadState, itemError}' <<<"$upload_json"
-
-  log "Chrome: submitting for review"
-  local publish_json
-  publish_json="$(
-    curl -fsS -X POST \
-      -H "Authorization: Bearer $token" \
-      -H "x-goog-api-version: 2" \
-      "$publish_url"
-  )"
-  jq -c . <<<"$publish_json"
-}
-
-publish_firefox() {
-  require_env AMO_JWT_ISSUER AMO_JWT_SECRET AMO_ADDON_ID
-
-  local base="${AMO_BASE_URL%/}"
-  local addon_id
-  addon_id="$(url_path_encode "$AMO_ADDON_ID")"
-
-  log "Firefox: uploading $XPI to AMO ($AMO_CHANNEL)"
-  local upload_json
-  upload_json="$(
-    curl -fsS -X POST "$base/addons/upload/" \
-      -H "Authorization: JWT $(amo_jwt)" \
-      -F "upload=@$XPI" \
-      -F "channel=$AMO_CHANNEL"
-  )"
-  local upload_uuid
-  upload_uuid="$(jq -er '.uuid' <<<"$upload_json")"
-
-  log "Firefox: waiting for AMO validation ($upload_uuid)"
-  local detail_json processed valid
-  for _ in {1..60}; do
-    detail_json="$(
-      curl -fsS "$base/addons/upload/$upload_uuid/" \
-        -H "Authorization: JWT $(amo_jwt)"
-    )"
-    processed="$(jq -r '.processed' <<<"$detail_json")"
-    valid="$(jq -r '.valid' <<<"$detail_json")"
-
-    if [[ "$processed" == "true" ]]; then
-      if [[ "$valid" == "true" ]]; then
-        break
-      fi
-      jq -c '.validation' <<<"$detail_json" >&2
-      die "AMO validation failed for upload $upload_uuid"
-    fi
-
-    sleep 10
-  done
-
-  [[ "${valid:-}" == "true" ]] || die "timed out waiting for AMO validation"
-
-  log "Firefox: creating new AMO version"
-  local version_json
-  version_json="$(
-    jq -nc --arg upload "$upload_uuid" '{upload: $upload}' |
-      curl -fsS -X POST "$base/addons/addon/$addon_id/versions/" \
-        -H "Authorization: JWT $(amo_jwt)" \
-        -H "Content-Type: application/json" \
-        --data-binary @-
-  )"
-  jq -c . <<<"$version_json"
-}
-
-while (($#)); do
+while [[ $# -gt 0 ]]; do
   case "$1" in
-    --dry-run)
-      DRY_RUN=1
-      ;;
-    --no-build)
-      BUILD=0
-      ;;
-    --chrome-only)
-      PUBLISH_FIREFOX=0
-      ;;
-    --firefox-only)
-      PUBLISH_CHROME=0
-      ;;
-    --amo-channel)
-      shift
-      [[ $# -gt 0 ]] || die "--amo-channel requires a value"
-      AMO_CHANNEL="$1"
-      ;;
-    -h|--help)
-      usage
-      exit 0
-      ;;
-    *)
-      die "unknown option: $1"
-      ;;
+    --build-only) BUILD_ONLY=1; shift ;;
+    --dry-run) DRY_RUN=1; shift ;;
+    --no-build) BUILD=0; shift ;;
+    --chrome-only) PUBLISH_FIREFOX=0; PUBLISH_SAFARI=0; shift ;;
+    --firefox-only) PUBLISH_CHROME=0; PUBLISH_SAFARI=0; shift ;;
+    --safari-only) PUBLISH_CHROME=0; PUBLISH_FIREFOX=0; shift ;;
+    --no-safari) PUBLISH_SAFARI=0; shift ;;
+    --ios) INCLUDE_IOS=1; shift ;;
+    --no-ios) INCLUDE_IOS=0; shift ;;
+    -h|--help) usage ;;
+    *) echo "error: unknown argument: $1" >&2; usage ;;
   esac
-  shift
 done
 
-[[ "$AMO_CHANNEL" == "listed" || "$AMO_CHANNEL" == "unlisted" ]] || die "AMO channel must be listed or unlisted"
+VERSION="$(python3 -c "import json; print(json.load(open('$ROOT/manifest.json'))['version'])")"
+PARENT="$(cd "$ROOT/.." && pwd)"
+ZIP="$PARENT/NewsMinus-${VERSION}.zip"
+XPI="$PARENT/NewsMinus-${VERSION}.xpi"
 
-need_command curl
-need_command jq
-need_command python3
+echo "== Publish NewsMinus ${VERSION} =="
 
-if ((BUILD)); then
-  "$SCRIPT_DIR/newCleaner.sh"
-fi
-
-VERSION="$(version_from_manifest)"
-ZIP="$PARENT/NYTimesCleaner-$VERSION.zip"
-XPI="$PARENT/NYTimesCleaner-$VERSION.xpi"
-
-validate_artifacts
-log "Artifacts ready:"
-log "  Chrome:  $ZIP"
-log "  Firefox: $XPI"
-
-if ((DRY_RUN)); then
-  ((PUBLISH_CHROME)) && require_env CWS_EXTENSION_ID CWS_CLIENT_ID CWS_CLIENT_SECRET CWS_REFRESH_TOKEN
-  ((PUBLISH_FIREFOX)) && require_env AMO_JWT_ISSUER AMO_JWT_SECRET AMO_ADDON_ID
-  log "Dry run passed."
+if [[ "$DRY_RUN" -eq 1 ]]; then
+  echo "Dry run — would:"
+  if [[ "$BUILD" -eq 1 ]]; then
+    echo "  1. Build $ZIP and $XPI (newCleaner.sh)"
+  else
+    echo "  1. Use existing $ZIP and $XPI"
+  fi
+  if [[ "$PUBLISH_SAFARI" -eq 1 ]]; then
+    echo "  2. Build Safari macOS archive (build-safari-mac.sh)"
+    if [[ "$INCLUDE_IOS" -eq 1 ]]; then
+      echo "  2b. Build Safari iOS archive (build-safari-ios.sh)"
+    fi
+  fi
+  if [[ "$BUILD_ONLY" -eq 0 ]]; then
+    echo "  3. Upload to selected stores"
+    "$SCRIPT_DIR/check-release-credentials.sh" || true
+    "$SCRIPT_DIR/check-store-pending.sh" || true
+  fi
   exit 0
 fi
 
-((PUBLISH_CHROME)) && publish_chrome
-((PUBLISH_FIREFOX)) && publish_firefox
+if [[ "$BUILD" -eq 1 ]]; then
+  echo
+  echo "== Build Chrome zip + Firefox xpi =="
+  "$SCRIPT_DIR/newCleaner.sh"
+else
+  [[ -f "$ZIP" ]] || { echo "error: missing Chrome zip: $ZIP" >&2; exit 1; }
+  [[ -f "$XPI" ]] || { echo "error: missing Firefox xpi: $XPI" >&2; exit 1; }
+fi
 
-log "Publish requests completed."
+PKG=""
+IPA=""
+if [[ "$PUBLISH_SAFARI" -eq 1 ]]; then
+  echo
+  echo "== Build Safari macOS archive =="
+  PKG="$("$SCRIPT_DIR/build-safari-mac.sh" | tail -1)"
+
+  if [[ "$INCLUDE_IOS" -eq 1 ]]; then
+    echo
+    echo "== Build Safari iOS archive =="
+    if IPA="$("$SCRIPT_DIR/build-safari-ios.sh" | tail -1)"; then
+      :
+    else
+      echo "WARNING: iOS Safari build failed; skipping iOS for this run." >&2
+      echo "  Ensure the iOS platform is installed (Xcode > Settings > Components) and that" >&2
+      echo "  an App Store Connect app exists for ${IOS_BUNDLE_ID:-com.nunus.NYTimesCleanerHost.ios}." >&2
+      INCLUDE_IOS=0
+      IPA=""
+    fi
+  fi
+fi
+
+if [[ "$BUILD_ONLY" -eq 1 ]]; then
+  echo
+  echo "Build complete (--build-only; no store upload)."
+  echo "  Chrome: $ZIP"
+  echo "  Firefox: $XPI"
+  if [[ "$PUBLISH_SAFARI" -eq 1 ]]; then
+    echo "  Safari (macOS): $PKG"
+    if [[ "$INCLUDE_IOS" -eq 1 ]]; then
+      echo "  Safari (iOS): $IPA"
+    fi
+  fi
+  exit 0
+fi
+
+print_artifacts() {
+  echo "  Chrome: $ZIP"
+  echo "  Firefox: $XPI"
+  if [[ "$PUBLISH_SAFARI" -eq 1 ]]; then
+    echo "  Safari (macOS): $PKG"
+    if [[ "$INCLUDE_IOS" -eq 1 ]]; then echo "  Safari (iOS): $IPA"; fi
+  fi
+}
+
+echo
+echo "== Check store credentials =="
+if ! "$SCRIPT_DIR/check-release-credentials.sh"; then
+  echo
+  echo "Stopped before publishing. Artifacts are ready:"
+  print_artifacts
+  echo
+  echo "Fill in scripts/release.env, then run:"
+  echo "  ./scripts/publish-stores.sh"
+  exit 1
+fi
+
+echo
+echo "== Check for pending store submissions =="
+if ! "$SCRIPT_DIR/check-store-pending.sh"; then
+  echo
+  echo "Stopped before publishing. Artifacts are ready:"
+  print_artifacts
+  exit 1
+fi
+
+if [[ "$PUBLISH_CHROME" -eq 1 ]]; then
+  echo
+  echo "== Publish Chrome =="
+  python3 "$SCRIPT_DIR/publish-chrome.py" "$ZIP"
+fi
+
+if [[ "$PUBLISH_FIREFOX" -eq 1 ]]; then
+  echo
+  echo "== Publish Firefox =="
+  "$SCRIPT_DIR/publish-firefox.sh"
+fi
+
+if [[ "$PUBLISH_SAFARI" -eq 1 ]]; then
+  echo
+  echo "== Publish Safari (Mac App Store) =="
+  "$SCRIPT_DIR/publish-safari-mac.sh" "$PKG"
+
+  if [[ "${APP_STORE_SKIP_SUBMIT:-}" == "1" ]]; then
+    echo "Skipped App Store submit (APP_STORE_SKIP_SUBMIT=1)."
+  else
+    echo
+    echo "== Submit Safari for App Review (macOS) =="
+    "$SCRIPT_DIR/submit-safari-appstore.sh"
+  fi
+
+  if [[ "$INCLUDE_IOS" -eq 1 ]]; then
+    echo
+    echo "== Publish Safari (iOS App Store) =="
+    "$SCRIPT_DIR/publish-safari-ios.sh" "$IPA"
+
+    if [[ "${APP_STORE_SKIP_SUBMIT:-}" == "1" ]]; then
+      echo "Skipped iOS App Store submit (APP_STORE_SKIP_SUBMIT=1)."
+    else
+      echo
+      echo "== Submit Safari for App Review (iOS) =="
+      "$SCRIPT_DIR/submit-safari-ios.sh"
+    fi
+  fi
+fi
+
+echo
+echo "Publish ${VERSION} complete."
+if [[ "$PUBLISH_CHROME" -eq 1 ]]; then echo "  Chrome: ${ZIP}"; fi
+if [[ "$PUBLISH_FIREFOX" -eq 1 ]]; then echo "  Firefox: signed via web-ext"; fi
+if [[ "$PUBLISH_SAFARI" -eq 1 ]]; then
+  echo "  Safari (macOS): ${PKG} uploaded; App Review submission attempted via API"
+  if [[ "$INCLUDE_IOS" -eq 1 ]]; then
+    echo "  Safari (iOS): ${IPA} uploaded; App Review submission attempted via API"
+  fi
+fi
+echo "Monitor review status in the store dashboards / App Store Connect."
+
+if [[ "${PUBLISH_CHECK_SKIP_DAILY:-}" != "1" ]]; then
+  echo
+  echo "== Arm daily publish-check until live =="
+  "$SCRIPT_DIR/setup-publish-check-daily.sh" --version "$VERSION"
+fi

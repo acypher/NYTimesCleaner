@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check whether manifest.json version is live on Chrome and Firefox."""
+"""Check whether manifest.json version is live on Chrome, Firefox, and Safari (macOS + iOS)."""
 
 from __future__ import annotations
 
@@ -175,16 +175,172 @@ def firefox_status(target: str) -> LiveStatus:
     return LiveStatus(store, "BEHIND", live, target, f"live {live}; target {target} not live")
 
 
+import check_store_pending as pending  # noqa: E402
+
+SAFARI_PLATFORMS = pending.SAFARI_PLATFORMS
+
+
+def safari_auto_release_enabled() -> bool:
+    return os.environ.get("APP_STORE_AUTO_RELEASE", "1").strip().lower() not in {"0", "false", "no"}
+
+
+def safari_version_rows(app_id: str, platform: str) -> list[dict]:
+    payload = pending.asc_get(f"/v1/apps/{app_id}/appStoreVersions?filter[platform]={platform}&limit=20")
+    return payload.get("data") or []
+
+
+def safari_live_version(rows: list[dict]) -> str:
+    live = "unknown"
+    for row in rows:
+        attrs = row.get("attributes") or {}
+        version_string = attrs.get("versionString") or "?"
+        if attrs.get("appStoreState") != "READY_FOR_SALE":
+            continue
+        if live == "unknown" or version_key(version_string) > version_key(live):
+            live = version_string
+    return live
+
+
+def try_release_safari_version(target: str) -> list[str]:
+    """Release Safari versions when Apple approved but manual release is required."""
+    from app_store_connect import AppStoreConnectClient
+
+    notes: list[str] = []
+    if not safari_auto_release_enabled():
+        return notes
+
+    required = [
+        "APP_STORE_CONNECT_API_KEY_ID",
+        "APP_STORE_CONNECT_ISSUER_ID",
+        "APP_STORE_CONNECT_API_KEY_PATH",
+    ]
+    if any(not env(name) for name in required):
+        return notes
+
+    client = AppStoreConnectClient()
+    for store, platform, bundle_env, bundle_default in SAFARI_PLATFORMS:
+        bundle_id = env(bundle_env) or bundle_default
+        apps = pending.asc_get(f"/v1/apps?filter[bundleId]={parse.quote(bundle_id)}")
+        app_rows = apps.get("data") or []
+        if not app_rows:
+            continue
+        app_id = app_rows[0]["id"]
+        for row in safari_version_rows(app_id, platform):
+            attrs = row.get("attributes") or {}
+            if attrs.get("versionString") != target:
+                continue
+            if attrs.get("appStoreState") == "PENDING_DEVELOPER_RELEASE":
+                client.release_app_store_version(row["id"])
+                notes.append(f"Released NewsMinus {target} on {store} (was PENDING_DEVELOPER_RELEASE)")
+            break
+    return notes
+
+
+def safari_status(target: str, store: str, platform: str, bundle_env: str, bundle_default: str) -> LiveStatus:
+    from app_store_connect import AppStoreConnectError
+
+    bundle_id = env(bundle_env) or bundle_default
+    required = [
+        "APP_STORE_CONNECT_API_KEY_ID",
+        "APP_STORE_CONNECT_ISSUER_ID",
+        "APP_STORE_CONNECT_API_KEY_PATH",
+    ]
+    if any(not env(name) for name in required):
+        return LiveStatus(store, "CHECK", "unknown", target, "credentials missing",
+                          "Set App Store Connect API key vars in scripts/release.env")
+
+    try:
+        apps = pending.asc_get(f"/v1/apps?filter[bundleId]={parse.quote(bundle_id)}")
+    except AppStoreConnectError as exc:
+        return LiveStatus(store, "CHECK", "unknown", target, "could not list app", f"{exc}")
+
+    app_rows = apps.get("data") or []
+    if not app_rows:
+        return LiveStatus(store, "BEHIND", "none", target, f"no app for bundle id {bundle_id}",
+                          "One-time step: create the app record in App Store Connect (New App).")
+
+    app_id = app_rows[0]["id"]
+    app_name = app_rows[0]["attributes"].get("name", bundle_id)
+
+    try:
+        rows = safari_version_rows(app_id, platform)
+    except AppStoreConnectError as exc:
+        return LiveStatus(store, "CHECK", "unknown", target, "could not list versions", f"{exc}")
+
+    live = safari_live_version(rows)
+    target_state = None
+    for row in rows:
+        attrs = row.get("attributes") or {}
+        if (attrs.get("versionString") or "?") == target:
+            target_state = attrs.get("appStoreState") or "UNKNOWN"
+
+    if versions_match(live, target) or target_state == "READY_FOR_SALE":
+        return LiveStatus(store, "LIVE", target, target, f"{target} is live ({app_name})")
+
+    if target_state == "PENDING_DEVELOPER_RELEASE":
+        detail = (
+            "Approved by Apple — publishCheck releases automatically when APP_STORE_AUTO_RELEASE is enabled."
+            if safari_auto_release_enabled()
+            else "Approved by Apple — click Release This Version in App Store Connect."
+        )
+        return LiveStatus(store, "PENDING", live, target,
+                          f"live {live}; {target} is PENDING_DEVELOPER_RELEASE (approved, not yet on App Store)",
+                          detail)
+
+    if target_state in pending.SAFARI_PENDING_VERSION_STATES:
+        return LiveStatus(store, "PENDING", live, target, f"live {live}; {target} is {target_state}",
+                          "Monitor App Store Connect until review completes.")
+
+    if target_state:
+        return LiveStatus(store, "PENDING", live, target, f"live {live}; {target} exists in state {target_state}")
+
+    try:
+        builds = pending.asc_get(f"/v1/apps/{app_id}/builds?limit=20")
+    except AppStoreConnectError as exc:
+        return LiveStatus(store, "CHECK", live, target, "could not list builds", f"{exc}")
+
+    for row in builds.get("data", []):
+        attrs = row.get("attributes") or {}
+        processing = attrs.get("processingState") or "UNKNOWN"
+        build_number = attrs.get("version") or "?"
+        if processing in pending.SAFARI_PENDING_BUILD_STATES:
+            pre_release = pending.asc_get(f"/v1/builds/{row['id']}/preReleaseVersion")
+            pre_version = (pre_release.get("data") or {}).get("attributes", {}).get("version", "")
+            if pre_version == target:
+                return LiveStatus(store, "PENDING", live, target,
+                                  f"live {live}; build {build_number} for {target} is {processing}")
+
+    return LiveStatus(store, "BEHIND", live, target, f"live {live}; target {target} not on App Store ({app_name})")
+
+
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Check whether NewsMinus is live on Chrome and Firefox.")
+    parser = argparse.ArgumentParser(description="Check whether NewsMinus is live on Chrome, Firefox, and Safari.")
     parser.add_argument("--version", metavar="X.Y.Z", help="Check a specific version (default: manifest.json).")
     parser.add_argument("--quiet", action="store_true", help="Only print summary when not fully live.")
+    parser.add_argument(
+        "--no-release",
+        action="store_true",
+        help="Do not release Safari versions in PENDING_DEVELOPER_RELEASE",
+    )
     args = parser.parse_args()
 
     load_release_env()
     target = args.version or repo_version()
+
+    release_notes: list[str] = []
+    if not args.no_release:
+        try:
+            release_notes = try_release_safari_version(target)
+        except Exception as exc:  # noqa: BLE001 - release is best-effort
+            release_notes = [f"Safari auto-release failed: {exc}"]
+
     rows = [chrome_status(target), firefox_status(target)]
+    for store, platform, bundle_env, bundle_default in SAFARI_PLATFORMS:
+        rows.append(safari_status(target, store, platform, bundle_env, bundle_default))
     all_live = all(row.state == "LIVE" for row in rows)
+
+    for note in release_notes:
+        print(note)
 
     if not args.quiet or not all_live:
         print(f"NewsMinus live check (target {target})")
@@ -197,7 +353,7 @@ def main() -> int:
         print()
 
     if all_live:
-        print(f"Summary: LIVE on Chrome and Firefox for {target}.")
+        print(f"Summary: LIVE on Chrome, Firefox, and Safari for {target}.")
         return 0
 
     pending = [row.store for row in rows if row.state == "PENDING"]

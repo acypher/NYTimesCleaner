@@ -1,30 +1,31 @@
 ---
 name: ship
 description: >-
-  Bump the NewsMinus version, commit all pending changes to master, and push.
-  Use when the user says "ship", "ship it", or "bump the version number, commit
-  and push". This does NOT upload to the Chrome or Firefox stores — that is the
-  separate publish flow.
+  Bump the NewsMinus version (minor), commit all pending changes to master, and
+  push. Use when the user says "ship", "ship it", or "bump the version number,
+  commit and push". This does NOT upload to stores — that is the separate
+  publish flow.
 ---
 
 # Ship
 
 Bump the version, commit to `master`, and push. Solo-developer flow: commit
-directly to `master`, no branches/PRs/tags unless the user asks.
+directly to `master`, no branches/PRs/tags (see the git-workflow rule).
 
 Not the same as **publish** (`scripts/publish-stores.sh`), which uploads to
-Chrome Web Store and Firefox AMO.
+Chrome, Firefox, and Safari stores.
+
+For a **tagged release + store publish**, use `./scripts/release.sh "summary"`
+instead (requires a clean git tree).
 
 ## Steps
 
 1. **Summary**: if the user didn't give one, ask for a short release summary
-   (used in the commit message `vX.Y.Z: <summary>`).
+   (used in the commit message `version X.Y.Z: <summary>`).
 
-2. **Bump level**:
-   - **patch** (default) — bug fixes (e.g. `1.3.1 → 1.3.2`)
-   - **minor** (`--minor`) — user-facing improvements (e.g. `1.3.1 → 1.4.0`)
-   - **major** (`--major`) — breaking changes or new supported sites in manifest
-   - **explicit** (`--version X.Y.Z`) — only when the user asks
+2. **Bump level**: default is **minor** (e.g. `2.0.1 → 2.1.0`). Use `--major`
+   only if the user asks or `manifest.json` gains a new supported site. Use
+   `--version X.Y.Z` only when the user asks for an explicit version (e.g. patch).
 
 3. **Bump all version files** with the repo tool (keeps `manifest.json`, Safari
    `MARKETING_VERSION`, `CURRENT_PROJECT_VERSION`, and regenerated
@@ -34,11 +35,9 @@ Chrome Web Store and Firefox AMO.
 python3 scripts/bump-version.py
 ```
 
-   For minor: `python3 scripts/bump-version.py --minor`
+   For a major bump: `python3 scripts/bump-version.py --major`.
 
-   For major: `python3 scripts/bump-version.py --major`
-
-   For explicit: `python3 scripts/bump-version.py --version X.Y.Z`
+   For an explicit version: `python3 scripts/bump-version.py --version X.Y.Z`.
 
    Read the script output for `$NEW` before committing (`next: X.Y.Z`).
 
@@ -53,7 +52,7 @@ node --check sites/nyt-betamax-main.js
 
 ```bash
 git add -A
-git commit -m "v$NEW: <summary>"
+git commit -m "version $NEW: <summary>"
 git push origin master
 ```
 
@@ -63,5 +62,7 @@ git push origin master
 
 - Stay on `master`. If on another branch, move work to `master` rather than
   opening a PR.
-- No git tag unless the user explicitly asks.
-- Building zip/xpi is optional during ship; **publish** builds artifacts.
+- No git tag (the `/version` command is the tagging + zip/xpi flow; `ship` is
+  intentionally lighter).
+- Agent edits bump **patch** automatically per **agent-patch-version**; use
+  **ship** when the user wants a deliberate release bump (usually minor).

@@ -23,11 +23,19 @@ fi
 channel="${AMO_CHANNEL:-listed}"
 artifacts_dir="${NEWSMINUS_FIREFOX_ARTIFACTS:-$ROOT/../firefox-artifacts-newsminus}"
 metadata="${NEWSMINUS_AMO_METADATA:-$ROOT/scripts/amo-metadata.json}"
+stage_dir="$(mktemp -d "${TMPDIR:-/tmp}/newsminus-firefox-sign.XXXXXX")"
 mkdir -p "$artifacts_dir"
+
+cleanup() {
+  rm -rf "$stage_dir"
+}
+trap cleanup EXIT
+
+"$SCRIPT_DIR/stage-firefox-source.sh" "$stage_dir" "$ROOT"
 
 args=(
   sign
-  --source-dir "$ROOT"
+  --source-dir "$stage_dir"
   --api-key "$AMO_JWT_ISSUER"
   --api-secret "$AMO_JWT_SECRET"
   --channel "$channel"
