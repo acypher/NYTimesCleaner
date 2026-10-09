@@ -20,7 +20,11 @@
     '#dock-container[data-testid^="onsite-messaging-unit-"]',
     '[data-testid^="onsite-messaging-unit-"][data-campaign]',
     '[data-campaign^="ACCT_UPGRADE_"][data-testid^="onsite-messaging-unit-"]',
-    'aside[data-testid="loaf"][data-gtm-element="newsletter_loaf_form"]'
+    'aside[data-testid="loaf"][data-gtm-element="newsletter_loaf_form"]',
+    'div[id^="story-ad-"][id$="-wrapper"]',
+    '#top-wrapper',
+    '#sponsor-wrapper',
+    '#bottom-wrapper'
   ];
 
   function isEnabledFromSession() {
