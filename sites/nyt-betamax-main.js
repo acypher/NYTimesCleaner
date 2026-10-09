@@ -41,6 +41,33 @@
     return true;
   }
 
+  // This Birdkit calendar uses JS timers, but already provides a still version
+  // for reduced motion. Install before waiting for prefs so early hydration
+  // sees that preference too. Scope it to this graphic's scripts, preserving
+  // the real system preference for the rest of the page.
+  if (!window.__newsMinusBirdkitMotionHook) {
+    window.__newsMinusBirdkitMotionHook = true;
+    const originalMatchMedia = window.matchMedia;
+    window.matchMedia = function newsMinusBirdkitMatchMedia(query) {
+      const media = originalMatchMedia.apply(this, arguments);
+      if (
+        typeof query !== 'string' ||
+        !/^\s*\(\s*prefers-reduced-motion\s*:\s*reduce\s*\)\s*$/.test(query) ||
+        !new Error().stack?.includes('/newsgraphics/PHPTs7LboZ_ZHw/')
+      ) return media;
+      return new Proxy(media, {
+        get(target, property) {
+          if (property === 'matches' && noAutoplayEnabled() !== false) return true;
+          const value = Reflect.get(target, property, target);
+          return typeof value === 'function' ? value.bind(target) : value;
+        },
+        set(target, property, value) {
+          return Reflect.set(target, property, value, target);
+        }
+      });
+    };
+  }
+
   const enabled = noAutoplayEnabled();
   if (enabled === false) return;
   if (enabled === null) {
@@ -146,6 +173,12 @@
     const el = document.createElement('style');
     el.id = 'nunus-vhs-grid-style';
     el.textContent = `
+/* Keep the Birdkit calendar's reduced-motion still free of CSS transitions. */
+.birdkit-body #g-trump-promo,
+.birdkit-body #g-trump-promo * {
+  animation: none !important;
+  transition: none !important;
+}
 .vhs-grid-page[data-nunus-vhs-awaiting-gesture="1"] .vhs-buffering-container,
 .vhs-grid-page[data-nunus-vhs-awaiting-gesture="1"] .vhs-buffering-container * {
   display: none !important;
