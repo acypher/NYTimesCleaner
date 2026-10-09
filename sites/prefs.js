@@ -11,7 +11,15 @@
     h === 'www.nytimes.com' ||
     h === 'nytimes.com' ||
     (typeof h === 'string' && h.endsWith('.nytimes.com'));
-  if (!onNyt || !ext?.storage?.local) return;
+  const onGuardian =
+    h === 'www.theguardian.com' ||
+    h === 'theguardian.com' ||
+    (typeof h === 'string' && h.endsWith('.theguardian.com'));
+  const onEpoch =
+    h === 'www.theepochtimes.com' ||
+    h === 'theepochtimes.com' ||
+    (typeof h === 'string' && h.endsWith('.theepochtimes.com'));
+  if ((!onNyt && !onGuardian && !onEpoch) || !ext?.storage?.local) return;
 
   const SETTINGS = {
     nytCleanerAutoplayBlock: 'nytCleanerAutoplayBlock',
@@ -28,17 +36,23 @@
 
   function mirror(values) {
     try {
-      ['nytCleanerAutoplayBlock', 'nytCleanerNoTimesAds'].forEach(key => {
-        const enabled = values[key] !== false;
-        sessionStorage.setItem(SETTINGS[key], enabled ? '1' : '0');
-      });
+      sessionStorage.setItem(
+        SETTINGS.nytCleanerAutoplayBlock,
+        values.nytCleanerAutoplayBlock !== false ? '1' : '0'
+      );
+      if (onNyt) {
+        sessionStorage.setItem(
+          SETTINGS.nytCleanerNoTimesAds,
+          values.nytCleanerNoTimesAds !== false ? '1' : '0'
+        );
+      }
       sessionStorage.setItem(SETTINGS.nytCleanerPrefsReady, '1');
     } catch (_) {}
   }
 
   mirror({
     nytCleanerAutoplayBlock: true,
-    nytCleanerNoTimesAds: true
+    nytCleanerNoTimesAds: onNyt
   });
 
   try {

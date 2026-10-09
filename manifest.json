@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "NewsMinus",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "News without video autoplay and self-ads",
   "browser_specific_settings": {
     "gecko": {
@@ -26,7 +26,11 @@
   ],
   "host_permissions": [
     "https://nytimes.com/*",
-    "https://*.nytimes.com/*"
+    "https://*.nytimes.com/*",
+    "https://theguardian.com/*",
+    "https://*.theguardian.com/*",
+    "https://theepochtimes.com/*",
+    "https://*.theepochtimes.com/*"
   ],
   "background": {
     "service_worker": "background.js",
@@ -84,6 +88,68 @@
       ],
       "js": [
         "sites/nyt-ads.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://theguardian.com/*",
+        "https://*.theguardian.com/*"
+      ],
+      "js": [
+        "sites/prefs.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://theguardian.com/*",
+        "https://*.theguardian.com/*"
+      ],
+      "js": [
+        "sites/guardian-videos-main.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://theguardian.com/*",
+        "https://*.theguardian.com/*"
+      ],
+      "js": [
+        "sites/guardian-videos.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://theepochtimes.com/*",
+        "https://*.theepochtimes.com/*"
+      ],
+      "js": [
+        "sites/prefs.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://theepochtimes.com/*",
+        "https://*.theepochtimes.com/*"
+      ],
+      "js": [
+        "sites/epochtimes-videos-main.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://theepochtimes.com/*",
+        "https://*.theepochtimes.com/*"
+      ],
+      "js": [
+        "sites/epochtimes-videos.js"
       ],
       "run_at": "document_start"
     }
