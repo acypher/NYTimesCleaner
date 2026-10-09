@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct NYTimesCleanerHostApp: App {
+struct NewsMinusHostApp: App {
     var body: some Scene {
         WindowGroup {
             Text(

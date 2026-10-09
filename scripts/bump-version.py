@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 MANIFEST = ROOT / "manifest.json"
-PBXPROJ = ROOT / "safari" / "NYTimesCleanerSafari.xcodeproj" / "project.pbxproj"
+PBXPROJ = ROOT / "safari" / "NewsMinusSafari.xcodeproj" / "project.pbxproj"
 GEN_PBX = ROOT / "safari" / "scripts" / "gen_pbxproj.py"
 
 MARKETING_RE = re.compile(r"MARKETING_VERSION = [^;]+;")

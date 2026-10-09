@@ -7,7 +7,7 @@
 #   or xattrs confuse the store backend while chrome://extensions unpacked is fine).
 # - Copies with COPYFILE_DISABLE=1 to avoid AppleDouble files.
 #
-#   newCleaner() { /path/to/NYTimesCleaner/scripts/newCleaner.sh "$@"; }
+#   newCleaner() { /path/to/NewsMinus/scripts/newCleaner.sh "$@"; }
 #
 # Optional: NYTNA_EXTENSION_ROOT=/other/clone ./scripts/newCleaner.sh
 
@@ -18,7 +18,7 @@ ROOT="${NYTNA_EXTENSION_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 PARENT="$(cd "$ROOT/.." && pwd)"
 
 ver="$(python3 -c "import json; print(json.load(open('$ROOT/manifest.json'))['version'])")"
-ZIP="$PARENT/NYTimesCleaner-${ver}.zip"
+ZIP="$PARENT/NewsMinus-${ver}.zip"
 
 rm -f "$ZIP"
 TMP="$(mktemp -d "${TMPDIR:-/tmp}/nytna-chromezip.XXXXXX")"
@@ -86,8 +86,8 @@ PY
 
 echo "Wrote $ZIP (Python zipfile; Chrome Web Store manifest)"
 
-echo "Building Firefox .xpi: $PARENT/NYTimesCleaner-${ver}.xpi"
-env NYTNA_EXTENSION_ROOT="$ROOT" NYTNA_XPI="$PARENT/NYTimesCleaner-${ver}.xpi" \
-  "$SCRIPT_DIR/build-nytimescleaner-firefox-xpi.sh"
+echo "Building Firefox .xpi: $PARENT/NewsMinus-${ver}.xpi"
+env NYTNA_EXTENSION_ROOT="$ROOT" NYTNA_XPI="$PARENT/NewsMinus-${ver}.xpi" \
+  "$SCRIPT_DIR/build-newsminus-firefox-xpi.sh"
 
-echo "Wrote $PARENT/NYTimesCleaner-${ver}.xpi"
+echo "Wrote $PARENT/NewsMinus-${ver}.xpi"

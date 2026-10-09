@@ -1,12 +1,12 @@
 # Safari (Xcode)
 
-The Chrome/Firefox web extension files live at the **repo root** (`manifest.json`, `background.js`, `sites/`, `icons/`). The Safari **NYTimesCleanerExtension** `.appex` must ship the same files under **`Contents/Resources`**. The Run Script phase invokes [`scripts/copy-web-extension-resources.sh`](scripts/copy-web-extension-resources.sh) on each build.
+The Chrome/Firefox web extension files live at the **repo root** (`manifest.json`, `background.js`, `sites/`, `icons/`). The Safari **NewsMinusExtension** `.appex` must ship the same files under **`Contents/Resources`**. The Run Script phase invokes [`scripts/copy-web-extension-resources.sh`](scripts/copy-web-extension-resources.sh) on each build.
 
 ## Open and build
 
-1. Open **`safari/NYTimesCleanerSafari.xcodeproj`** in Xcode (macOS **14+** for the extension Swift API used in `SafariWebExtensionHandler`).
-2. Select the **NYTimesCleanerHost** scheme, then **Product → Build**.
-3. Run **NYTimesCleanerHost.app** once if needed, then enable the extension: **Safari → Settings → Extensions** → turn on **NYTimesCleaner** and allow access for **nytimes.com** (and subdomains if Safari prompts).
+1. Open **`safari/NewsMinusSafari.xcodeproj`** in Xcode (macOS **14+** for the extension Swift API used in `SafariWebExtensionHandler`).
+2. Select the **NewsMinusHost** scheme, then **Product → Build**.
+3. Run **NewsMinusHost.app** once if needed, then enable the extension: **Safari → Settings → Extensions** → turn on **NewsMinus** and allow access for **nytimes.com** (and subdomains if Safari prompts).
 
 If the Xcode project file is missing or you changed target structure, regenerate it:
 
@@ -16,12 +16,12 @@ python3 safari/scripts/gen_pbxproj.py
 
 ## Run Script phase (already wired in generated project)
 
-On the **NYTimesCleanerExtension** target, **Build Phases** includes **Copy web extension resources** running before **Copy Bundle Resources**, with **Enable User Script Sandboxing** set to **No** so `cp`/`rsync` into the `.appex` is allowed.
+On the **NewsMinusExtension** target, **Build Phases** includes **Copy web extension resources** running before **Copy Bundle Resources**, with **Enable User Script Sandboxing** set to **No** so `cp`/`rsync` into the `.appex` is allowed.
 
 If you move the `.xcodeproj` outside this repo, set the web root explicitly in that phase:
 
 ```sh
-export NYTNA_WEBROOT="/absolute/path/to/NYTimesCleaner"
+export NYTNA_WEBROOT="/absolute/path/to/NewsMinus"
 /bin/sh "${NYTNA_WEBROOT}/safari/scripts/copy-web-extension-resources.sh"
 ```
 

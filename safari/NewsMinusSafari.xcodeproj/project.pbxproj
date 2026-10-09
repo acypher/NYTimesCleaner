@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4832C9D51D8B983A98BBEFC4 /* NYTimesCleanerHostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E00F80FEE8078A7A81B7C6 /* NYTimesCleanerHostApp.swift */; };
+		4832C9D51D8B983A98BBEFC4 /* NewsMinusHostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E00F80FEE8078A7A81B7C6 /* NewsMinusHostApp.swift */; };
 		879A141526AECB22A1441CA7 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF078481B9B44A156F8A6D99 /* SafariWebExtensionHandler.swift */; };
-		FFCCF3AFD281E1419406EE2D /* NYTimesCleanerExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 640DDD05409DAC8EB9C53096 /* NYTimesCleanerExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FFCCF3AFD281E1419406EE2D /* NewsMinusExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 640DDD05409DAC8EB9C53096 /* NewsMinusExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D4951FB208D8AEB29332BD92 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = A45E38BA573B8A2964D52018 /* AppIcon.icns */; };
 /* End PBXBuildFile section */
 
@@ -19,7 +19,7 @@
 			containerPortal = FBD244F05B1ED7416B6D41E7 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 032D4929E028623728830A90;
-			remoteInfo = NYTimesCleanerExtension;
+			remoteInfo = NewsMinusExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -30,7 +30,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				FFCCF3AFD281E1419406EE2D /* NYTimesCleanerExtension.appex in Embed Foundation Extensions */,
+				FFCCF3AFD281E1419406EE2D /* NewsMinusExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -38,16 +38,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		07E00F80FEE8078A7A81B7C6 /* NYTimesCleanerHostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NYTimesCleanerHostApp.swift; sourceTree = "<group>"; };
+		07E00F80FEE8078A7A81B7C6 /* NewsMinusHostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsMinusHostApp.swift; sourceTree = "<group>"; };
 		BF078481B9B44A156F8A6D99 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
 		9EEA8BB1D3231248389BF9A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		04E9CBD9E6E8E25B96835F49 /* NYTimesCleanerHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NYTimesCleanerHost.entitlements; sourceTree = "<group>"; };
+		04E9CBD9E6E8E25B96835F49 /* NewsMinusHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NewsMinusHost.entitlements; sourceTree = "<group>"; };
 		172BE2C482B307C2C562F971 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A45E38BA573B8A2964D52018 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
-		5D421BD0BBBC56D37E93CE2E /* NYTimesCleanerExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NYTimesCleanerExtension.entitlements; sourceTree = "<group>"; };
+		5D421BD0BBBC56D37E93CE2E /* NewsMinusExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NewsMinusExtension.entitlements; sourceTree = "<group>"; };
 		998494A74D22FF23D2A0CBAA /* copy-web-extension-resources.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "copy-web-extension-resources.sh"; sourceTree = "<group>"; };
-		1AA4C61265C13DA82233E50E /* NYTimesCleanerHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NYTimesCleanerHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		640DDD05409DAC8EB9C53096 /* NYTimesCleanerExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NYTimesCleanerExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AA4C61265C13DA82233E50E /* NewsMinusHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsMinusHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		640DDD05409DAC8EB9C53096 /* NewsMinusExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NewsMinusExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +70,7 @@
 		8D5C1EEA72AA5F1DA2B9B2EF /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				07E00F80FEE8078A7A81B7C6 /* NYTimesCleanerHostApp.swift */,
+				07E00F80FEE8078A7A81B7C6 /* NewsMinusHostApp.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -80,7 +80,7 @@
 			children = (
 				172BE2C482B307C2C562F971 /* Assets.xcassets */,
 				A45E38BA573B8A2964D52018 /* AppIcon.icns */,
-				04E9CBD9E6E8E25B96835F49 /* NYTimesCleanerHost.entitlements */,
+				04E9CBD9E6E8E25B96835F49 /* NewsMinusHost.entitlements */,
 			);
 			path = Host;
 			sourceTree = "<group>";
@@ -90,7 +90,7 @@
 			children = (
 				BF078481B9B44A156F8A6D99 /* SafariWebExtensionHandler.swift */,
 				9EEA8BB1D3231248389BF9A4 /* Info.plist */,
-				5D421BD0BBBC56D37E93CE2E /* NYTimesCleanerExtension.entitlements */,
+				5D421BD0BBBC56D37E93CE2E /* NewsMinusExtension.entitlements */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -106,8 +106,8 @@
 		FDBDDE9E5FA406430E4EE039 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1AA4C61265C13DA82233E50E /* NYTimesCleanerHost.app */,
-				640DDD05409DAC8EB9C53096 /* NYTimesCleanerExtension.appex */,
+				1AA4C61265C13DA82233E50E /* NewsMinusHost.app */,
+				640DDD05409DAC8EB9C53096 /* NewsMinusExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -115,9 +115,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		ACAD6076A2A8419A74C0992A /* NYTimesCleanerHost */ = {
+		ACAD6076A2A8419A74C0992A /* NewsMinusHost */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 39B87E3DA30A9BA6D3EA607D /* Build configuration list for PBXNativeTarget "NYTimesCleanerHost" */;
+			buildConfigurationList = 39B87E3DA30A9BA6D3EA607D /* Build configuration list for PBXNativeTarget "NewsMinusHost" */;
 			buildPhases = (
 				B74E720E6D169EDD582156A9 /* Sources */,
 				B91D1852C0A2DF27960D3C6A /* Frameworks */,
@@ -129,14 +129,14 @@
 			dependencies = (
 				46A25E7B3D33A2FBA4A9D801 /* PBXTargetDependency */,
 			);
-			name = NYTimesCleanerHost;
-			productName = NYTimesCleanerHost;
-			productReference = 1AA4C61265C13DA82233E50E /* NYTimesCleanerHost.app */;
+			name = NewsMinusHost;
+			productName = NewsMinusHost;
+			productReference = 1AA4C61265C13DA82233E50E /* NewsMinusHost.app */;
 			productType = "com.apple.product-type.application";
 		};
-		032D4929E028623728830A90 /* NYTimesCleanerExtension */ = {
+		032D4929E028623728830A90 /* NewsMinusExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A597364480B1B2AE03042794 /* Build configuration list for PBXNativeTarget "NYTimesCleanerExtension" */;
+			buildConfigurationList = A597364480B1B2AE03042794 /* Build configuration list for PBXNativeTarget "NewsMinusExtension" */;
 			buildPhases = (
 				DFC1AF7066803FAD78A0EC52 /* Copy web extension resources */,
 				8E3742CC95FD5609AC438417 /* Sources */,
@@ -146,9 +146,9 @@
 			);
 			dependencies = (
 			);
-			name = NYTimesCleanerExtension;
-			productName = NYTimesCleanerExtension;
-			productReference = 640DDD05409DAC8EB9C53096 /* NYTimesCleanerExtension.appex */;
+			name = NewsMinusExtension;
+			productName = NewsMinusExtension;
+			productReference = 640DDD05409DAC8EB9C53096 /* NewsMinusExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -165,7 +165,7 @@
 					032D4929E028623728830A90 = {CreatedOnToolsVersion = 15.0; };
 				};
 			};
-			buildConfigurationList = 5740F585E54B5E17115BDB27 /* Build configuration list for PBXProject "NYTimesCleanerSafari" */;
+			buildConfigurationList = 5740F585E54B5E17115BDB27 /* Build configuration list for PBXProject "NewsMinusSafari" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -178,8 +178,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				ACAD6076A2A8419A74C0992A /* NYTimesCleanerHost */,
-				032D4929E028623728830A90 /* NYTimesCleanerExtension */,
+				ACAD6076A2A8419A74C0992A /* NewsMinusHost */,
+				032D4929E028623728830A90 /* NewsMinusExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -214,7 +214,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4832C9D51D8B983A98BBEFC4 /* NYTimesCleanerHostApp.swift in Sources */,
+				4832C9D51D8B983A98BBEFC4 /* NewsMinusHostApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,7 +231,7 @@
 /* Begin PBXTargetDependency section */
 		46A25E7B3D33A2FBA4A9D801 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 032D4929E028623728830A90 /* NYTimesCleanerExtension */;
+			target = 032D4929E028623728830A90 /* NewsMinusExtension */;
 			targetProxy = B516799D4551D6B734651523 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -271,10 +271,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Host/NYTimesCleanerHost.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Host/NewsMinusHost.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 30002;
+				CURRENT_PROJECT_VERSION = 30003;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = NewsMinus;
@@ -284,7 +284,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 3.0.2;
+				MARKETING_VERSION = 3.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -297,10 +297,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Host/NYTimesCleanerHost.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Host/NewsMinusHost.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 30002;
+				CURRENT_PROJECT_VERSION = 30003;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = NewsMinus;
@@ -310,7 +310,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 3.0.2;
+				MARKETING_VERSION = 3.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -322,9 +322,9 @@
 		E7734A932583EB3219655D1E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Extension/NYTimesCleanerExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Extension/NewsMinusExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30002;
+				CURRENT_PROJECT_VERSION = 30003;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extension/Info.plist;
@@ -336,7 +336,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 3.0.2;
+				MARKETING_VERSION = 3.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost.Extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -349,9 +349,9 @@
 		1849D324BED7AA88C03A4095 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Extension/NYTimesCleanerExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Extension/NewsMinusExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30002;
+				CURRENT_PROJECT_VERSION = 30003;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extension/Info.plist;
@@ -363,7 +363,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 3.0.2;
+				MARKETING_VERSION = 3.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost.Extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -376,7 +376,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		39B87E3DA30A9BA6D3EA607D /* Build configuration list for PBXNativeTarget "NYTimesCleanerHost" */ = {
+		39B87E3DA30A9BA6D3EA607D /* Build configuration list for PBXNativeTarget "NewsMinusHost" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				15596BD57ACE533B77BAB91D /* Debug */,
@@ -385,7 +385,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A597364480B1B2AE03042794 /* Build configuration list for PBXNativeTarget "NYTimesCleanerExtension" */ = {
+		A597364480B1B2AE03042794 /* Build configuration list for PBXNativeTarget "NewsMinusExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E7734A932583EB3219655D1E /* Debug */,
@@ -394,7 +394,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5740F585E54B5E17115BDB27 /* Build configuration list for PBXProject "NYTimesCleanerSafari" */ = {
+		5740F585E54B5E17115BDB27 /* Build configuration list for PBXProject "NewsMinusSafari" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E3E3135596E9528C762DD949 /* Debug */,
