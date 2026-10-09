@@ -11,6 +11,13 @@
 		879A141526AECB22A1441CA7 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF078481B9B44A156F8A6D99 /* SafariWebExtensionHandler.swift */; };
 		FFCCF3AFD281E1419406EE2D /* NewsMinusExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 640DDD05409DAC8EB9C53096 /* NewsMinusExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D4951FB208D8AEB29332BD92 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = A45E38BA573B8A2964D52018 /* AppIcon.icns */; };
+		42653D5D0531A57DC4FA291F /* NewsMinusHostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E00F80FEE8078A7A81B7C6 /* NewsMinusHostApp.swift */; };
+		C3CD4C83464E8CFF810D2D01 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF078481B9B44A156F8A6D99 /* SafariWebExtensionHandler.swift */; };
+		2970DE58EC077E14E3FD748F /* NewsMinusExtensioniOS.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 22BEC718BD3356C7A17C960F /* NewsMinusExtensioniOS.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D20225EAF7AFE1A9B3E94724 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 172BE2C482B307C2C562F971 /* Assets.xcassets */; };
+		DAA57C20A464EC4C43D6F8A9 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 2A11166CC170798DD48391F0 /* PrivacyInfo.xcprivacy */; };
+		0AFD71CAA5D0456B3DD5C5C3 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 2A11166CC170798DD48391F0 /* PrivacyInfo.xcprivacy */; };
+		18502CAFEF1FCA1B76A34A87 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 2A11166CC170798DD48391F0 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -20,6 +27,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 032D4929E028623728830A90;
 			remoteInfo = NewsMinusExtension;
+		};
+		AE05803790E860A1278B7A13 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FBD244F05B1ED7416B6D41E7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8BA1FA83A1839B0118648E44;
+			remoteInfo = NewsMinusExtensioniOS;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -35,24 +49,43 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		052A54D351C012682219C4CB /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				2970DE58EC077E14E3FD748F /* NewsMinusExtensioniOS.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		07E00F80FEE8078A7A81B7C6 /* NewsMinusHostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsMinusHostApp.swift; sourceTree = "<group>"; };
 		BF078481B9B44A156F8A6D99 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
 		9EEA8BB1D3231248389BF9A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F80C243A36003317C0BCA8F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		04E9CBD9E6E8E25B96835F49 /* NewsMinusHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NewsMinusHost.entitlements; sourceTree = "<group>"; };
 		172BE2C482B307C2C562F971 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A45E38BA573B8A2964D52018 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
 		5D421BD0BBBC56D37E93CE2E /* NewsMinusExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NewsMinusExtension.entitlements; sourceTree = "<group>"; };
 		998494A74D22FF23D2A0CBAA /* copy-web-extension-resources.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "copy-web-extension-resources.sh"; sourceTree = "<group>"; };
+		1E87A3922B3A71518BCDA723 /* NewsMinusHostIOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NewsMinusHostIOS.entitlements; sourceTree = "<group>"; };
+		870918584651382F00D93F44 /* NewsMinusExtensionIOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NewsMinusExtensionIOS.entitlements; sourceTree = "<group>"; };
+		2A11166CC170798DD48391F0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		1AA4C61265C13DA82233E50E /* NewsMinusHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsMinusHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		640DDD05409DAC8EB9C53096 /* NewsMinusExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NewsMinusExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A2960ADB4853E75310BB75C /* NewsMinusHostIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsMinusHostIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		22BEC718BD3356C7A17C960F /* NewsMinusExtensioniOS.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NewsMinusExtensioniOS.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		B91D1852C0A2DF27960D3C6A /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = ( ); runOnlyForDeploymentPostprocessing = 0; };
 		DE7744A376E9E4B09170EC6C /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = ( ); runOnlyForDeploymentPostprocessing = 0; };
+		6A0FB205EE2536786DD23969 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = ( ); runOnlyForDeploymentPostprocessing = 0; };
+		B8235EE7AA74D6DD975F365C /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = ( ); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -62,6 +95,7 @@
 				8D5C1EEA72AA5F1DA2B9B2EF /* Shared */,
 				222D88C75249F2326A4A1300 /* Host */,
 				B7961F3A90834C61CDB12FD9 /* Extension */,
+				A70CAA0D9F7414CCA31DD0C1 /* iOS */,
 				FAF1729E56F48CB74BA09BD4 /* scripts */,
 				FDBDDE9E5FA406430E4EE039 /* Products */,
 			);
@@ -80,6 +114,7 @@
 			children = (
 				172BE2C482B307C2C562F971 /* Assets.xcassets */,
 				A45E38BA573B8A2964D52018 /* AppIcon.icns */,
+				F80C243A36003317C0BCA8F1 /* Info.plist */,
 				04E9CBD9E6E8E25B96835F49 /* NewsMinusHost.entitlements */,
 			);
 			path = Host;
@@ -95,6 +130,16 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
+		A70CAA0D9F7414CCA31DD0C1 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				1E87A3922B3A71518BCDA723 /* NewsMinusHostIOS.entitlements */,
+				870918584651382F00D93F44 /* NewsMinusExtensionIOS.entitlements */,
+				2A11166CC170798DD48391F0 /* PrivacyInfo.xcprivacy */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
 		FAF1729E56F48CB74BA09BD4 /* scripts */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +153,8 @@
 			children = (
 				1AA4C61265C13DA82233E50E /* NewsMinusHost.app */,
 				640DDD05409DAC8EB9C53096 /* NewsMinusExtension.appex */,
+				7A2960ADB4853E75310BB75C /* NewsMinusHostIOS.app */,
+				22BEC718BD3356C7A17C960F /* NewsMinusExtensioniOS.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -141,6 +188,7 @@
 				DFC1AF7066803FAD78A0EC52 /* Copy web extension resources */,
 				8E3742CC95FD5609AC438417 /* Sources */,
 				DE7744A376E9E4B09170EC6C /* Frameworks */,
+				503B128FD7ACCF79A9C11F00 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -149,6 +197,43 @@
 			name = NewsMinusExtension;
 			productName = NewsMinusExtension;
 			productReference = 640DDD05409DAC8EB9C53096 /* NewsMinusExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		2BCC76DD8C0B6ECC58649598 /* NewsMinusHostIOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 38AEFFFF096919C8525AE159 /* Build configuration list for PBXNativeTarget "NewsMinusHostIOS" */;
+			buildPhases = (
+				F379467E40302C37DD1AE1ED /* Sources */,
+				6A0FB205EE2536786DD23969 /* Frameworks */,
+				B3C2FC2D1C6212A38EFE0ABF /* Resources */,
+				052A54D351C012682219C4CB /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A8EEF4F2AAABA5BF1643E256 /* PBXTargetDependency */,
+			);
+			name = NewsMinusHostIOS;
+			productName = NewsMinusHostIOS;
+			productReference = 7A2960ADB4853E75310BB75C /* NewsMinusHostIOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8BA1FA83A1839B0118648E44 /* NewsMinusExtensioniOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FFCC76495B733BB69C4D19AB /* Build configuration list for PBXNativeTarget "NewsMinusExtensioniOS" */;
+			buildPhases = (
+				9B01F10A10B7753D3C72DC49 /* Copy web extension resources */,
+				6DFB1FE63415F1A8AC56DC14 /* Sources */,
+				B8235EE7AA74D6DD975F365C /* Frameworks */,
+				177B68BC89766CF5AE39D219 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NewsMinusExtensioniOS;
+			productName = NewsMinusExtensioniOS;
+			productReference = 22BEC718BD3356C7A17C960F /* NewsMinusExtensioniOS.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -163,6 +248,8 @@
 				TargetAttributes = {
 					ACAD6076A2A8419A74C0992A = {CreatedOnToolsVersion = 15.0; };
 					032D4929E028623728830A90 = {CreatedOnToolsVersion = 15.0; };
+					2BCC76DD8C0B6ECC58649598 = {CreatedOnToolsVersion = 15.0; };
+					8BA1FA83A1839B0118648E44 = {CreatedOnToolsVersion = 15.0; };
 				};
 			};
 			buildConfigurationList = 5740F585E54B5E17115BDB27 /* Build configuration list for PBXProject "NewsMinusSafari" */;
@@ -180,6 +267,8 @@
 			targets = (
 				ACAD6076A2A8419A74C0992A /* NewsMinusHost */,
 				032D4929E028623728830A90 /* NewsMinusExtension */,
+				2BCC76DD8C0B6ECC58649598 /* NewsMinusHostIOS */,
+				8BA1FA83A1839B0118648E44 /* NewsMinusExtensioniOS */,
 			);
 		};
 /* End PBXProject section */
@@ -193,10 +282,46 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B3C2FC2D1C6212A38EFE0ABF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D20225EAF7AFE1A9B3E94724 /* Assets.xcassets in Resources */,
+				DAA57C20A464EC4C43D6F8A9 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		503B128FD7ACCF79A9C11F00 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0AFD71CAA5D0456B3DD5C5C3 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		177B68BC89766CF5AE39D219 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18502CAFEF1FCA1B76A34A87 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		DFC1AF7066803FAD78A0EC52 /* Copy web extension resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "Copy web extension resources";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"$PROJECT_DIR\" && /bin/sh ./scripts/copy-web-extension-resources.sh\n";
+		};
+		9B01F10A10B7753D3C72DC49 /* Copy web extension resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -226,6 +351,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F379467E40302C37DD1AE1ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42653D5D0531A57DC4FA291F /* NewsMinusHostApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6DFB1FE63415F1A8AC56DC14 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3CD4C83464E8CFF810D2D01 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -233,6 +374,11 @@
 			isa = PBXTargetDependency;
 			target = 032D4929E028623728830A90 /* NewsMinusExtension */;
 			targetProxy = B516799D4551D6B734651523 /* PBXContainerItemProxy */;
+		};
+		A8EEF4F2AAABA5BF1643E256 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8BA1FA83A1839B0118648E44 /* NewsMinusExtensioniOS */;
+			targetProxy = AE05803790E860A1278B7A13 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -274,17 +420,20 @@
 				CODE_SIGN_ENTITLEMENTS = Host/NewsMinusHost.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 30005;
+				CURRENT_PROJECT_VERSION = 30006;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Host/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NewsMinus;
+				INFOPLIST_KEY_CFBundleIconFile = AppIcon;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.news";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 3.0.5;
+				MARKETING_VERSION = 3.0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -300,17 +449,20 @@
 				CODE_SIGN_ENTITLEMENTS = Host/NewsMinusHost.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 30005;
+				CURRENT_PROJECT_VERSION = 30006;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Host/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NewsMinus;
+				INFOPLIST_KEY_CFBundleIconFile = AppIcon;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.news";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 3.0.5;
+				MARKETING_VERSION = 3.0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -324,7 +476,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Extension/NewsMinusExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30005;
+				CURRENT_PROJECT_VERSION = 30006;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extension/Info.plist;
@@ -336,7 +488,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 3.0.5;
+				MARKETING_VERSION = 3.0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost.Extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -351,7 +503,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Extension/NewsMinusExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30005;
+				CURRENT_PROJECT_VERSION = 30006;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Extension/Info.plist;
@@ -363,13 +515,141 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 3.0.5;
+				MARKETING_VERSION = 3.0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost.Extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		00EF2A3356156E0929B33BDC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iOS/NewsMinusHostIOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 30006;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = NewsMinus;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 3.0.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D6706DA2F04296E499BF5142 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iOS/NewsMinusHostIOS.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 30006;
+				DEVELOPMENT_TEAM = 3A5647GGDY;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = NewsMinus;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 3.0.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "NewsMinus iOS App Store";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AEEDEC13660986D4CE818BAE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = iOS/NewsMinusExtensionIOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 30006;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Extension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NewsMinus;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.0.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost.ios.extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		46D99C1A0065FEFCFA6B17E1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = iOS/NewsMinusExtensionIOS.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 30006;
+				DEVELOPMENT_TEAM = 3A5647GGDY;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Extension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NewsMinus;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.0.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nunus.NYTimesCleanerHost.ios.extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "NewsMinus iOS Extension App Store";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -390,6 +670,24 @@
 			buildConfigurations = (
 				E7734A932583EB3219655D1E /* Debug */,
 				1849D324BED7AA88C03A4095 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		38AEFFFF096919C8525AE159 /* Build configuration list for PBXNativeTarget "NewsMinusHostIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00EF2A3356156E0929B33BDC /* Debug */,
+				D6706DA2F04296E499BF5142 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FFCC76495B733BB69C4D19AB /* Build configuration list for PBXNativeTarget "NewsMinusExtensioniOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AEEDEC13660986D4CE818BAE /* Debug */,
+				46D99C1A0065FEFCFA6B17E1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
